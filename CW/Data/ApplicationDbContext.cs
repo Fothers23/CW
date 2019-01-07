@@ -11,6 +11,7 @@ namespace CW.Data
         {
         }
 
+        // This allows the statuses and comments to link correctly.
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
+// This model provides the custom properties to the existing Identity Entity. 
 namespace CW.Models
 {
     public class ApplicationUser : IdentityUser

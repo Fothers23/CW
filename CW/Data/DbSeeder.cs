@@ -9,6 +9,7 @@ namespace CW.Data
 {
     public class DbSeeder
     {
+        // This is called at runtime in Startup.cs
         public static async Task Seed(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager)
         {

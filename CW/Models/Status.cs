@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+// This model contains the properties relating to statuses.
 namespace CW.Models
 {
     public class Status
@@ -17,6 +18,7 @@ namespace CW.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy} at {0:hh:mm}", ApplyFormatInEditMode = true)]
         public DateTime DatePosted { get; set; }
 
+        // This constructor sets the current time when the status is created.
         public Status()
         {
             DatePosted = DateTime.Now;

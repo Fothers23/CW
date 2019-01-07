@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This model contains the properties and entities relating to comments.
 namespace CW.Models
 {
     public class Comment
@@ -21,6 +22,7 @@ namespace CW.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy} at {0:hh:mm}", ApplyFormatInEditMode = true)]
         public DateTime DateCommented { get; set; }
 
+        // This constructor sets the current time when the comment is created.
         public Comment()
         {
             DateCommented = DateTime.Now;
