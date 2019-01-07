@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CW.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +10,6 @@ namespace CW.Data
             : base(options)
         {
         }
+        public DbSet<Status> Statuses { get; set; }
     }
 }
