@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using CW.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using CW.Models;
 
 namespace CW
 {
@@ -65,7 +66,8 @@ namespace CW
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -83,6 +85,8 @@ namespace CW
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            DbSeeder.Seed(context, userManager);
 
             app.UseMvc(routes =>
             {
