@@ -7,6 +7,8 @@ using CW.Data;
 using CW.Models;
 using Microsoft.AspNetCore.Authorization;
 
+/* This class provides the functionality for altering the Statuses and Comments tables
+ * in the database and redirecting to the correct views */
 namespace CW.Controllers
 {
     [Authorize]
@@ -14,18 +16,22 @@ namespace CW.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        // Constructor that provides access to the database.
         public StatusController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: Status
+        // Method to list all statuses.
         public async Task<IActionResult> Index()
         {
             return View(await _context.Statuses.ToListAsync());
         }
 
         // GET: Status/Details/5
+        /* Method to direct users to a page where both a specific status
+         * and its comments can be viewed. */
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,9 +48,10 @@ namespace CW.Controllers
             }
             StatusDetailsViewModel viewModel = await GetViewModelFromStatus(status);
 
-            return View(viewModel);
+            return View(viewModel); // Returns the details view with the added comment.
         }
 
+        // Method to allow customers to add comments to a specific status.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
@@ -72,6 +79,7 @@ namespace CW.Controllers
             return View(viewModel);
         }
 
+        // Method to list comments for a specific status.
         private async Task<StatusDetailsViewModel> GetViewModelFromStatus(Status status)
         {
             StatusDetailsViewModel viewModel = new StatusDetailsViewModel();
@@ -86,6 +94,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Create
+        // Method to direct the admin to a form page to add a status.
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
@@ -93,12 +102,11 @@ namespace CW.Controllers
         }
 
         // POST: Status/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Method to allow admin to create new statuses.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Post,DatePosted")] Status status)
+        public async Task<IActionResult> Create([Bind("Post")] Status status)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +118,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Edit/5
+        // Method to allow admin access to a page to edit a status.
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -127,8 +136,7 @@ namespace CW.Controllers
         }
 
         // POST: Status/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // Method to allow admin to edit a specific status.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -143,7 +151,7 @@ namespace CW.Controllers
             {
                 try
                 {
-                    _context.Update(status);
+                    _context.Update(status); 
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -163,6 +171,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Delete/5
+        // Method to direct admin to a delete confirmation page for statuses.
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -182,6 +191,7 @@ namespace CW.Controllers
         }
 
         // POST: Status/Delete/5
+        // Method to remove a status from the database.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -193,11 +203,13 @@ namespace CW.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Method to check that a status exists in the database.
         private bool StatusExists(int id)
         {
             return _context.Statuses.Any(e => e.StatusID == id);
         }
 
+        // Method to direct the customer to a page to edit a specific comment.
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> EditComment(int? id)
         {
@@ -214,6 +226,7 @@ namespace CW.Controllers
             return View(comment);
         }
 
+        // Method to edit a comment.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
@@ -246,7 +259,8 @@ namespace CW.Controllers
             }
             return View(comment);
         }
-
+        
+        // Method to direct the customer to a delete confirmation page for comments.
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DeleteComment(int? id)
         {
@@ -265,6 +279,7 @@ namespace CW.Controllers
             return View(status);
         }
 
+        // Method to remove comments from the database.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
@@ -276,6 +291,7 @@ namespace CW.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Method to check that a comment exists in the database.
         private bool CommentExists(int id)
         {
             return _context.Comments.Any(e => e.CommentId == id);

@@ -23,6 +23,7 @@ namespace CW.Data
 
             string password = "Password123!";
             
+            // Creates the roles if they don't exist.
             if (await roleManager.FindByNameAsync(role1) == null)
             {
                 await roleManager.CreateAsync(new ApplicationRole(role1, desc1, DateTime.Now));
@@ -32,6 +33,7 @@ namespace CW.Data
                 await roleManager.CreateAsync(new ApplicationRole(role2, desc2, DateTime.Now));
             }
 
+            // Creates the users with roles if they don't exist
             if (await userManager.FindByNameAsync("Member1@email.com") == null)
             {
                 var member1 = new ApplicationUser
