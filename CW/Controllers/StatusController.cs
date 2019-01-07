@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CW.Data;
 using CW.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CW.Controllers
 {
+    [Authorize]
     public class StatusController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -47,6 +47,7 @@ namespace CW.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Details([Bind("StatusID, Remark")] StatusDetailsViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -85,6 +86,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -95,6 +97,7 @@ namespace CW.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Post,DatePosted")] Status status)
         {
             if (ModelState.IsValid)
@@ -107,6 +110,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -127,6 +131,7 @@ namespace CW.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("StatusID,Post")] Status status)
         {
             if (id != status.StatusID)
@@ -158,6 +163,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,6 +184,7 @@ namespace CW.Controllers
         // POST: Status/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var status = await _context.Statuses.FindAsync(id);
@@ -191,6 +198,7 @@ namespace CW.Controllers
             return _context.Statuses.Any(e => e.StatusID == id);
         }
 
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> EditComment(int? id)
         {
             if (id == null)
@@ -208,6 +216,7 @@ namespace CW.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> EditComment(int id, [Bind("CommentId,Remark")] Comment comment)
         {
             if (id != comment.CommentId)
@@ -238,6 +247,7 @@ namespace CW.Controllers
             return View(comment);
         }
 
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DeleteComment(int? id)
         {
             if (id == null)
@@ -257,6 +267,7 @@ namespace CW.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             var comment = await _context.Comments.FindAsync(id);

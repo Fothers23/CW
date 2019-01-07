@@ -61,13 +61,17 @@ namespace CW
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, ApplicationRole>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            ApplicationDbContext context, UserManager<IdentityUser> userManager)
+            ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -86,7 +90,7 @@ namespace CW
 
             app.UseAuthentication();
 
-            DbSeeder.Seed(context, userManager);
+            DbSeeder.Seed(context, userManager, roleManager).Wait();
 
             app.UseMvc(routes =>
             {
