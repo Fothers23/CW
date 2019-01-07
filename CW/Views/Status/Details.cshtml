@@ -1,4 +1,4 @@
-﻿@model CW.Models.Status
+﻿@model CW.Models.StatusDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,20 +11,65 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Post)
+            @Html.DisplayNameFor(model => model.Status.Post)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Post)
+            @Html.DisplayFor(model => model.Status.Post)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DatePosted)
+            @Html.DisplayNameFor(model => model.Status.DatePosted)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DatePosted)
+            @Html.DisplayFor(model => model.Status.DatePosted)
         </dd>
     </dl>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Comments
+            </th>
+            <th>
+                Date Commented
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Comment item in Model.Comments)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remark)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCommented)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<hr />
+
+<h4>Leave a Comment</h4>
+<div class="row">
+    <div class="col-md-4">
+        @Html.AntiForgeryToken()
+        <form asp-action="Details">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="StatusID" value="@Model.Status.StatusID" />
+            <div class="form-group">
+                <input asp-for="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Comment" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.StatusID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.StatusID">Edit Status</a> |
     <a asp-action="Index">Back to List</a>
 </div>

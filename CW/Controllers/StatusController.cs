@@ -26,6 +26,7 @@ namespace CW.Controllers
         }
 
         // GET: Status/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,14 +34,54 @@ namespace CW.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses
-                .FirstOrDefaultAsync(m => m.StatusID == id);
+            Status status = await _context.Statuses
+                .SingleOrDefaultAsync(m => m.StatusID == id);
             if (status == null)
             {
                 return NotFound();
             }
+            StatusDetailsViewModel viewModel = await GetViewModelFromStatus(status);
 
-            return View(status);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details([Bind("StatusID, Remark")] StatusDetailsViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment comment = new Comment();
+                comment.Remark = viewModel.Remark;
+
+                Status status = await _context.Statuses
+                    .SingleOrDefaultAsync(m => m.StatusID == viewModel.StatusID);
+
+                if (status == null)
+                {
+                    return NotFound();
+                }
+
+                comment.MyStatus = status;
+                _context.Comments.Add(comment);
+                await _context.SaveChangesAsync();
+
+                viewModel = await GetViewModelFromStatus(status);
+            }
+            return View(viewModel);
+        }
+
+        private async Task<StatusDetailsViewModel> GetViewModelFromStatus(Status status)
+        {
+            StatusDetailsViewModel viewModel = new StatusDetailsViewModel();
+
+            viewModel.Status = status;
+
+            List<Comment> comments = await _context.Comments
+                .Where(x => x.MyStatus == status).ToListAsync();
+
+            viewModel.Comments = comments;
+            return viewModel;
         }
 
         // GET: Status/Create

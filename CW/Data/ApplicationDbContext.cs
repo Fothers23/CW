@@ -10,6 +10,13 @@ namespace CW.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
