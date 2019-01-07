@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-// This model provides the contructors and properties to create custom roles.
 namespace CW.Models
 {
     public class ApplicationRole : IdentityRole

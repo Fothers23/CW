@@ -55,7 +55,7 @@ namespace CW.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> Details([Bind("StatusID, Remark,UserID")] StatusDetailsViewModel viewModel)
+        public async Task<IActionResult> Details([Bind("StatusID, Remark")] StatusDetailsViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +106,7 @@ namespace CW.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Post,UserID")] Status status)
+        public async Task<IActionResult> Create([Bind("Post")] Status status)
         {
             if (ModelState.IsValid)
             {
@@ -140,7 +140,7 @@ namespace CW.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("StatusID,Post,UserID")] Status status)
+        public async Task<IActionResult> Edit(int id, [Bind("StatusID,Post")] Status status)
         {
             if (id != status.StatusID)
             {
@@ -230,7 +230,7 @@ namespace CW.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> EditComment(int id, [Bind("CommentId,Remark,UserID")] Comment comment)
+        public async Task<IActionResult> EditComment(int id, [Bind("CommentId,Remark")] Comment comment)
         {
             if (id != comment.CommentId)
             {

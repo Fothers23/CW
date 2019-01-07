@@ -117,16 +117,12 @@ namespace CW.Data.Migrations
 
                     b.Property<int?>("MyStatusStatusID");
 
-                    b.Property<string>("MyUserId");
-
                     b.Property<string>("Remark")
                         .HasMaxLength(200);
 
                     b.HasKey("CommentId");
 
                     b.HasIndex("MyStatusStatusID");
-
-                    b.HasIndex("MyUserId");
 
                     b.ToTable("Comments");
                 });
@@ -139,14 +135,10 @@ namespace CW.Data.Migrations
 
                     b.Property<DateTime>("DatePosted");
 
-                    b.Property<string>("MyUserId");
-
                     b.Property<string>("Post")
                         .HasMaxLength(200);
 
                     b.HasKey("StatusID");
-
-                    b.HasIndex("MyUserId");
 
                     b.ToTable("Statuses");
                 });
@@ -246,17 +238,6 @@ namespace CW.Data.Migrations
                     b.HasOne("CW.Models.Status", "MyStatus")
                         .WithMany()
                         .HasForeignKey("MyStatusStatusID");
-
-                    b.HasOne("CW.Models.ApplicationUser", "MyUser")
-                        .WithMany()
-                        .HasForeignKey("MyUserId");
-                });
-
-            modelBuilder.Entity("CW.Models.Status", b =>
-                {
-                    b.HasOne("CW.Models.ApplicationUser", "MyUser")
-                        .WithMany()
-                        .HasForeignKey("MyUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
