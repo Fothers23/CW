@@ -127,7 +127,7 @@ namespace CW.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Post,DatePosted")] Status status)
+        public async Task<IActionResult> Edit(int id, [Bind("StatusID,Post")] Status status)
         {
             if (id != status.StatusID)
             {
@@ -189,6 +189,85 @@ namespace CW.Controllers
         private bool StatusExists(int id)
         {
             return _context.Statuses.Any(e => e.StatusID == id);
+        }
+
+        public async Task<IActionResult> EditComment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            return View(comment);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditComment(int id, [Bind("CommentId,Remark")] Comment comment)
+        {
+            if (id != comment.CommentId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(comment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommentExists(comment.CommentId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(comment);
+        }
+
+        public async Task<IActionResult> DeleteComment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var status = await _context.Comments
+                .FirstOrDefaultAsync(m => m.CommentId == id);
+            if (status == null)
+            {
+                return NotFound();
+            }
+
+            return View(status);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CommentExists(int id)
+        {
+            return _context.Comments.Any(e => e.CommentId == id);
         }
     }
 }
