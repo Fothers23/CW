@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This model contains the properties and entities relating to comments.
 namespace CW.Models
 {
     public class Comment
@@ -27,5 +28,6 @@ namespace CW.Models
         }
 
         public virtual Status MyStatus { get; set; }
+        public virtual ApplicationUser MyUser { get; set; }
     }
 }

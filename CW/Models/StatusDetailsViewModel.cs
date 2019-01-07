@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
+// This is view specific model to combine properties from status and comment into one view.
 namespace CW.Models
 {
     public class StatusDetailsViewModel
@@ -12,6 +10,7 @@ namespace CW.Models
         public List<Comment> Comments { get; set; }
         public int CommentID { get; set; }
         public int StatusID { get; set; }
+        public int UserID { get; set; }
         public string Remark { get; set; }
         public DateTime DateCommented { get; set; }
     }

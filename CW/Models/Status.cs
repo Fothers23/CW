@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+// This model contains the properties and entities relating to comments.
 namespace CW.Models
 {
     public class Status
@@ -21,5 +22,7 @@ namespace CW.Models
         {
             DatePosted = DateTime.Now;
         }
+
+        public virtual ApplicationUser MyUser { get; set; }
     }
 }
